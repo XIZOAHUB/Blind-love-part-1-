@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1">
+<meta name="theme-color" content="#050510">
+<title>Blind Love — Part I Story | Complete Visual Novel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#050510;--deep:#0a0a1a;--navy:#0d0d20;--card:#13132a;
+  --pink:#ff6b9d;--rose:#ff3d7f;--sakura:#ffcce0;--crimson:#c2185b;
+  --gold:#f5c842;--amber:#e8a020;--cream:#fff9f0;
+  --blue:#4fc3f7;--indigo:#3949ab;--violet:#7c3aed;--lavender:#b39ddb;
+  --text:#f0eaff;--muted:#9090b0;--dimmed:#60607a;
+  --gp:0 0 24px rgba(255,107,157,.7),0 0 50px rgba(255,107,157,.3);
+  --gg:0 0 20px rgba(245,200,66,.7),0 0 40px rgba(245,200,66,.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+/* ===== BODY & BASE ===== */
+body{
+  font-family:'Libre Baskerville',serif;
+  background:var(--ink);color:var(--text);
+  min-height:100vh;overflow:hidden;
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='18'%3E💗%3C/text%3E%3C/svg%3E"),auto;
+}
+
+/* ===== PARTICLES ===== */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.petal,.sparkle,.raindrop{position:absolute;}
+.petal{animation:fallPetal linear infinite;font-size:clamp(10px,2vw,16px);opacity:0;}
+@keyframes fallPetal{0%{top:-20px;opacity:0;transform:rotate(0);}10%{opacity:.7;}90%{opacity:.4;}100%{top:105vh;opacity:0;transform:rotate(720deg) translateX(40px);}}
+.raindrop{width:1px;background:linear-gradient(to bottom,transparent,rgba(150,180,255,.4));animation:rain linear infinite;}
+@keyframes rain{from{top:-20px;}to{top:105vh;}}
+.sparkle{animation:twinkle ease-in-out infinite;border-radius:50%;background:white;}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.5);}50%{opacity:.9;transform:scale(1.2);}}
+
+/* ===== SCENE BACKGROUNDS ===== */
+.scene{
+  position:fixed;inset:0;z-index:2;
+  transition:opacity 1.2s ease;
+  overflow:hidden;
+}
+
+/* School classroom */
+.scene-classroom{background:linear-gradient(180deg,#1a1025 0%,#2a1535 40%,#180e28 100%);}
+.classroom-window{position:absolute;right:60px;top:30px;width:140px;height:200px;background:linear-gradient(180deg,rgba(100,150,255,.08),rgba(80,120,255,.04));border:2px solid rgba(255,255,255,.08);border-radius:4px;}
+.classroom-window::before{content:'';position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.06);}
+.classroom-window::after{content:'';position:absolute;top:50%;left:0;width:100%;height:1px;background:rgba(255,255,255,.06);}
+.desk-line{position:absolute;bottom:80px;left:0;right:0;height:2px;background:rgba(255,255,255,.04);}
+
+/* Rooftop */
+.scene-rooftop{background:linear-gradient(180deg,#06061a 0%,#0d0d30 30%,#1a0a2e 70%,#0d0820 100%);}
+.fence{position:absolute;bottom:60px;left:0;right:0;height:60px;display:flex;gap:10px;padding:0 20px;align-items:flex-end;}
+.fence-bar{width:4px;height:45px;background:rgba(255,255,255,.12);border-radius:2px;}
+.fence-top{position:absolute;bottom:95px;left:20px;right:20px;height:2px;background:rgba(255,255,255,.1);}
+
+/* Rain scene */
+.scene-rain{background:linear-gradient(180deg,#080818 0%,#0a0a22 40%,#060616 100%);}
+
+/* Night city */
+.scene-city{background:linear-gradient(180deg,#050510 0%,#0a0520 40%,#08050f 100%);}
+.city-glow{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(255,107,157,.05),transparent);}
+
+/* River */
+.scene-river{background:linear-gradient(180deg,#070718 0%,#0a0e24 60%,#040e18 100%);}
+.river-shimmer{position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,rgba(80,150,255,.12),transparent);animation:riverShim 3s ease-in-out infinite;}
+@keyframes riverShim{0%,100%{opacity:.6;}50%{opacity:1;}}
+
+/* Dawn */
+.scene-dawn{background:linear-gradient(180deg,#08050f 0%,#1a0520 30%,#2a0a1a 60%,#200a14 100%);}
+.dawn-glow{position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse at 50% 100%,rgba(255,180,100,.18) 0%,transparent 70%);}
+
+/* Moon */
+.moon{
+  position:absolute;
+  background:radial-gradient(circle at 35% 38%,#fffbe6 0%,#ffeebb 40%,#ffdd88 100%);
+  border-radius:50%;
+  box-shadow:0 0 40px rgba(255,240,180,.4),0 0 80px rgba(255,220,120,.15);
+}
+
+/* Stars */
+.star-field{position:absolute;inset:0;}
+
+/* City buildings */
+.buildings{position:absolute;bottom:0;left:0;right:0;height:200px;}
+.building{position:absolute;bottom:0;border-radius:3px 3px 0 0;}
+
+/* ===== MAIN LAYOUT ===== */
+#app{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;}
+
+/* ===== TITLE SCREEN ===== */
+#titleScreen{
+  position:fixed;inset:0;z-index:100;
+  background:radial-gradient(ellipse at 30% 60%,#1a0528 0%,#08080f 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;
+  transition:opacity 1s ease;
+}
+.title-sakura{font-size:clamp(60px,15vw,120px);animation:titleHeart 2s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,107,157,.9));margin-bottom:20px;}
+@keyframes titleHeart{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.title-main{
+  font-family:'Cinzel Decorative',cursive;
+  font-size:clamp(28px,8vw,72px);
+  background:linear-gradient(135deg,#ff6b9d 0%,#f5c842 40%,#b39ddb 80%,#ff6b9d 100%);
+  background-size:200%;animation:shimmerTitle 4s linear infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;letter-spacing:2px;
+}
+@keyframes shimmerTitle{0%{background-position:0%;}100%{background-position:200%;}}
+.title-part{font-size:clamp(11px,3vw,16px);letter-spacing:6px;color:var(--lavender);text-transform:uppercase;margin-bottom:6px;}
+.title-sub{font-family:'Dancing Script',cursive;font-size:clamp(16px,4vw,26px);color:var(--sakura);margin-bottom:40px;font-style:italic;}
+.title-meta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px;}
+.title-tag{background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.3);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--sakura);letter-spacing:1px;}
+.title-btn{
+  background:linear-gradient(135deg,var(--rose),var(--violet));
+  border:none;border-radius:50px;padding:16px 50px;
+  font-family:'Cinzel Decorative',cursive;font-size:clamp(13px,3.5vw,18px);
+  color:white;cursor:pointer;
+  box-shadow:var(--gp);
+  transition:transform .2s,box-shadow .3s;
+  letter-spacing:2px;
+}
+.title-btn:active{transform:scale(.95);}
+.title-scroll{margin-top:20px;font-size:11px;color:var(--dimmed);letter-spacing:2px;}
+
+/* ===== CHAPTER SELECTOR ===== */
+#chapterScreen{
+  position:fixed;inset:0;z-index:99;
+  background:rgba(5,5,16,.97);
+  backdrop-filter:blur(20px);
+  display:none;flex-direction:column;align-items:center;
+  padding:20px;overflow-y:auto;
+}
+.ch-header{text-align:center;padding:20px 0 24px;}
+.ch-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(16px,4vw,28px);color:var(--gold);margin-bottom:6px;}
+.ch-sub{font-size:12px;color:var(--muted);letter-spacing:2px;}
+.ch-list{width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px;padding-bottom:30px;}
+.ch-card{
+  background:var(--card);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:16px 20px;
+  display:flex;align-items:center;gap:16px;
+  cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.ch-card::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,107,157,.04),transparent);transform:translateX(-100%);transition:transform .5s;}
+.ch-card:hover::before,.ch-card:active::before{transform:translateX(100%);}
+.ch-card.current{border-color:rgba(255,107,157,.5);box-shadow:0 0 20px rgba(255,107,157,.15);}
+.ch-card.locked{opacity:.4;cursor:not-allowed;}
+.ch-num{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--violet),var(--rose));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel Decorative',cursive;font-size:13px;color:white;
+  flex-shrink:0;
+}
+.ch-info{flex:1;}
+.ch-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.ch-desc{font-size:11px;color:var(--muted);}
+.ch-icon{font-size:20px;}
+.ch-close{
+  background:transparent;border:1px solid rgba(255,255,255,.15);
+  border-radius:30px;padding:10px 24px;
+  color:var(--muted);font-size:13px;cursor:pointer;
+  margin-top:16px;font-family:'Libre Baskerville',serif;
+}
+
+/* ===== SCENE DISPLAY ===== */
+#sceneWrap{flex:1;position:relative;overflow:hidden;}
+
+/* ===== CHARACTERS ===== */
+#chars{
+  position:absolute;bottom:160px;left:0;right:0;
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:30px;z-index:15;
+  transition:opacity .6s ease;
+}
+
+/* === Character: KAI === */
+.char-kai-art{display:flex;flex-direction:column;align-items:center;position:relative;transition:transform .5s;}
+.char-kai-art.active{transform:scale(1.05) translateY(-10px);}
+.char-kai-art.inactive{opacity:.5;filter:brightness(.7);transform:scale(.95);}
+
+.k-hair-main{width:58px;height:30px;background:linear-gradient(180deg,#2c1a00,#4d2e00);border-radius:29px 29px 0 0;position:relative;z-index:4;margin-bottom:-6px;}
+.k-hair-main::before{content:'';position:absolute;top:-7px;left:-10px;width:78px;height:26px;background:linear-gradient(180deg,#3d2400,#5a3600);border-radius:20px;}
+.k-hair-side-l{position:absolute;top:14px;left:-8px;width:13px;height:36px;background:linear-gradient(180deg,#4d2e00,#3a2000);border-radius:6px 0 8px 10px;z-index:5;}
+.k-hair-side-r{position:absolute;top:14px;right:-8px;width:13px;height:36px;background:linear-gradient(180deg,#4d2e00,#3a2000);border-radius:0 6px 10px 8px;z-index:5;}
+.k-hair-bang{position:absolute;top:8px;left:14px;right:14px;height:16px;background:#3d2600;border-radius:0 0 8px 8px;z-index:5;}
+.k-face{width:54px;height:58px;background:linear-gradient(180deg,#ffe4c8,#ffd0a8);border-radius:25px 25px 26px 26px;position:relative;z-index:3;}
+.k-eyes{position:absolute;top:17px;left:0;right:0;display:flex;justify-content:space-around;padding:0 8px;}
+.k-eye{width:10px;height:12px;background:#1a0800;border-radius:50% 50% 40% 40%;position:relative;}
+.k-eye::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:4px;background:rgba(50,30,0,.8);border-radius:4px;}
+.k-eye::after{content:'';position:absolute;top:2px;right:2px;width:3px;height:3px;background:rgba(255,255,255,.9);border-radius:50%;}
+.k-eye.happy{height:8px;border-radius:50% 50% 50% 50%;top:19px;}
+.k-eye.sad{transform:rotate(-10deg);top:16px;}
+.k-eye.worried{border-radius:30% 70% 40% 60%;}
+.k-brows{position:absolute;top:12px;left:0;right:0;display:flex;justify-content:space-around;padding:0 10px;}
+.k-brow{width:12px;height:3px;background:#3d2000;border-radius:3px;}
+.k-brow.worried{transform:rotate(15deg) translateY(-2px);}
+.k-brow.sad{transform:rotate(-15deg);}
+.k-nose{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:6px;height:4px;border-bottom:2px solid rgba(200,130,80,.4);border-radius:50%;}
+.k-mouth{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:16px;height:7px;border-bottom:2.5px solid rgba(200,100,80,.6);border-radius:0 0 10px 10px;}
+.k-mouth.smile{border-bottom-color:rgba(200,100,80,.7);width:18px;}
+.k-mouth.sad-m{border-radius:10px 10px 0 0;border-top:2px solid rgba(200,100,80,.6);border-bottom:none;}
+.k-blush{position:absolute;top:28px;left:0;right:0;display:flex;justify-content:space-between;padding:0 4px;}
+.k-blush span{width:12px;height:6px;background:rgba(255,150,130,.35);border-radius:50%;}
+.k-neck{width:20px;height:10px;background:#ffd0a8;margin:0 auto;position:relative;z-index:2;}
+.k-uniform{width:64px;height:80px;background:linear-gradient(180deg,#1e3a5f,#162d50);border-radius:8px 8px 0 0;position:relative;z-index:2;margin-top:-2px;}
+.k-collar{position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:14px solid #ffd0a8;opacity:.3;}
+.k-tie{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:8px;height:30px;background:linear-gradient(180deg,#c62828,#b71c1c);border-radius:1px 1px 4px 4px;}
+.k-uniform-line{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.08);}
+
+/* === Character: YUKI === */
+.char-yuki-art{display:flex;flex-direction:column;align-items:center;position:relative;transition:transform .5s;}
+.char-yuki-art.active{transform:scale(1.05) translateY(-10px);}
+.char-yuki-art.inactive{opacity:.5;filter:brightness(.7);transform:scale(.95);}
+
+.y-hair-top{width:62px;height:22px;background:linear-gradient(180deg,#7a1040,#c01858);border-radius:31px 31px 0 0;position:relative;z-index:4;margin-bottom:-4px;}
+.y-hair-top::before{content:'';position:absolute;top:-10px;left:-12px;width:86px;height:28px;background:linear-gradient(180deg,#5c0c30,#900c3f);border-radius:26px;}
+.y-hair-tip-l{position:absolute;bottom:-25px;left:-10px;width:14px;height:45px;background:linear-gradient(180deg,#900c3f,#600828);border-radius:5px 0 10px 12px;z-index:5;}
+.y-hair-tip-r{position:absolute;bottom:-25px;right:-10px;width:14px;height:45px;background:linear-gradient(180deg,#900c3f,#600828);border-radius:0 5px 12px 10px;z-index:5;}
+.y-bang-l{position:absolute;bottom:-12px;left:4px;width:16px;height:20px;background:linear-gradient(180deg,#c01858,#900c3f);border-radius:4px 0 8px 8px;z-index:6;}
+.y-bang-r{position:absolute;bottom:-12px;right:4px;width:16px;height:20px;background:linear-gradient(180deg,#c01858,#900c3f);border-radius:0 4px 8px 8px;z-index:6;}
+.y-ribbon{position:absolute;top:-18px;right:4px;z-index:7;}
+.y-ribbon::before{content:'';display:block;width:16px;height:10px;background:var(--pink);border-radius:8px 2px 8px 0;transform:rotate(-15deg) translateX(3px);}
+.y-ribbon::after{content:'';display:block;width:16px;height:10px;background:var(--rose);border-radius:2px 8px 0 8px;transform:rotate(15deg) translateX(-3px) translateY(-6px);}
+
+.y-face{width:50px;height:55px;background:linear-gradient(180deg,#fff0f5,#ffe4ef);border-radius:22px 22px 24px 24px;position:relative;z-index:3;}
+.y-eyes{position:absolute;top:16px;left:0;right:0;display:flex;justify-content:space-around;padding:0 6px;}
+.y-eye{width:11px;height:14px;background:#1a0010;border-radius:50% 50% 40% 40%;position:relative;}
+.y-eye::before{content:'';position:absolute;top:-3px;left:-1px;right:-1px;height:5px;background:var(--rose);border-radius:4px;}
+.y-eye::after{content:'';position:absolute;top:2px;right:2px;width:3px;height:3px;background:rgba(255,255,255,.9);border-radius:50%;}
+.y-eye.crying::before{background:#c01858;}
+.y-tear{position:absolute;top:30px;width:3px;height:12px;background:linear-gradient(to bottom,rgba(150,200,255,.8),transparent);border-radius:3px;animation:tearFall .8s ease-in infinite;}
+@keyframes tearFall{from{opacity:1;height:5px;}to{opacity:0;height:15px;top:38px;}}
+.y-lashes-l,.y-lashes-r{position:absolute;top:-3px;display:flex;gap:1px;}
+.y-lashes-l{left:-1px;}
+.y-lashes-r{right:-1px;transform:scaleX(-1);}
+.y-lash{width:1.5px;height:4px;background:var(--rose);border-radius:1px;}
+.y-lash:nth-child(2){height:5px;transform:rotate(-5deg);}
+.y-lash:nth-child(3){height:4px;transform:rotate(-10deg);}
+.y-brows{position:absolute;top:11px;left:0;right:0;display:flex;justify-content:space-around;padding:0 8px;}
+.y-brow{width:13px;height:2.5px;background:var(--crimson);border-radius:3px;opacity:.8;}
+.y-brow.sad{transform:rotate(-12deg);}
+.y-brow.angry{transform:rotate(12deg);}
+.y-nose-y{position:absolute;bottom:17px;left:50%;transform:translateX(-50%);width:5px;height:3px;border-bottom:1.5px solid rgba(200,100,130,.4);border-radius:50%;}
+.y-mouth-y{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:14px;height:6px;border-bottom:2px solid rgba(200,80,120,.7);border-radius:0 0 10px 10px;}
+.y-mouth-y.smile-y{width:16px;border-bottom-color:rgba(200,80,120,.8);}
+.y-mouth-y.sad-y{border-radius:10px 10px 0 0;border-top:2px solid rgba(200,80,120,.6);border-bottom:none;}
+.y-mouth-y.angry-y{width:12px;}
+.y-blush-y{position:absolute;top:28px;left:0;right:0;display:flex;justify-content:space-between;padding:0 2px;}
+.y-blush-y span{width:14px;height:7px;background:rgba(255,100,150,.45);border-radius:50%;}
+.y-neck-y{width:18px;height:10px;background:#ffe4ef;margin:0 auto;z-index:2;}
+.y-uniform{width:58px;height:72px;background:linear-gradient(180deg,#ff8aad,#e05580);border-radius:6px 6px 0 0;position:relative;z-index:2;margin-top:-2px;}
+.y-collar-bow{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:18px;line-height:1;}
+.y-skirt{width:72px;height:24px;background:linear-gradient(180deg,#e05580,#c04060);border-radius:2px 2px 18px 18px;margin-top:-3px;z-index:2;}
+
+/* === Character: REN (friend) === */
+.char-ren-art{display:flex;flex-direction:column;align-items:center;}
+.char-ren-art.active{transform:scale(1.05) translateY(-10px);}
+.char-ren-art.inactive{opacity:.5;filter:brightness(.7);transform:scale(.95);}
+.r-hair{width:56px;height:32px;background:linear-gradient(180deg,#0a0a0a,#1a1a1a);border-radius:28px 28px 0 0;position:relative;z-index:4;margin-bottom:-4px;}
+.r-hair::before{content:'';position:absolute;top:-8px;left:-8px;width:72px;height:24px;background:#111;border-radius:20px;}
+.r-spike{position:absolute;top:-20px;width:8px;height:22px;background:linear-gradient(180deg,#1a1a1a,#111);border-radius:3px;}
+.r-spike:nth-child(1){left:16px;transform:rotate(-15deg);}
+.r-spike:nth-child(2){left:26px;}
+.r-spike:nth-child(3){right:16px;transform:rotate(15deg);}
+.r-face{width:50px;height:54px;background:linear-gradient(180deg,#ffd8b0,#ffc89a);border-radius:22px 22px 24px 24px;position:relative;z-index:3;}
+.r-eye{width:9px;height:11px;background:#080808;border-radius:50% 50% 40% 40%;position:relative;}
+.r-eye::after{content:'';position:absolute;top:1px;right:1px;width:3px;height:3px;background:rgba(255,255,255,.9);border-radius:50%;}
+.r-body{width:60px;height:74px;background:linear-gradient(180deg,#2d4a1e,#1e3212);border-radius:8px 8px 0 0;position:relative;z-index:2;}
+
+/* === Character: SAKURA (friend) === */
+.char-sakura-art{display:flex;flex-direction:column;align-items:center;}
+.s-hair-top{width:54px;height:20px;background:linear-gradient(180deg,#b8860b,#daa520);border-radius:27px 27px 0 0;position:relative;z-index:4;margin-bottom:-4px;}
+.s-hair-top::before{content:'';position:absolute;top:-8px;left:-8px;width:70px;height:22px;background:#c8960c;border-radius:22px;}
+.s-twintail-l{position:absolute;bottom:-50px;left:-16px;width:20px;height:60px;background:linear-gradient(180deg,#daa520,#b8860b);border-radius:10px 4px 12px 14px;z-index:5;}
+.s-twintail-r{position:absolute;bottom:-50px;right:-16px;width:20px;height:60px;background:linear-gradient(180deg,#daa520,#b8860b);border-radius:4px 10px 14px 12px;z-index:5;}
+.s-face{width:48px;height:52px;background:linear-gradient(180deg,#fff5e6,#ffe8d0);border-radius:20px 20px 22px 22px;position:relative;z-index:3;}
+.s-eye{width:10px;height:12px;background:#3d0040;border-radius:50% 50% 40% 40%;position:relative;}
+.s-eye::after{content:'';position:absolute;top:1px;right:1px;width:3px;height:3px;background:rgba(255,255,255,.9);border-radius:50%;}
+.s-body{width:54px;height:68px;background:linear-gradient(180deg,#ff9bc6,#e870a8);border-radius:6px 6px 0 0;position:relative;z-index:2;}
+
+/* Narrator box (no character) */
+.narrator-mode #chars{opacity:.3;}
+
+/* ===== DIALOGUE BOX ===== */
+#dialogueWrap{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  padding:0 12px 12px;
+}
+.dialogue-box{
+  background:rgba(5,5,18,.9);
+  border:1px solid rgba(255,107,157,.35);
+  border-radius:16px 16px 16px 16px;
+  padding:18px 20px 16px;
+  backdrop-filter:blur(16px);
+  position:relative;
+  box-shadow:0 -10px 40px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.03);
+}
+.dialogue-box::before{
+  content:'';position:absolute;top:0;left:20px;right:20px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,107,157,.4),transparent);
+}
+.speaker-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,61,127,.15);
+  border:1px solid rgba(255,61,127,.4);
+  border-radius:20px;padding:4px 14px 4px 10px;
+  margin-bottom:10px;
+}
+.speaker-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);}
+.speaker-dot.narrator{background:var(--lavender);}
+.speaker-dot.yuki{background:var(--pink);}
+.speaker-dot.kai{background:var(--blue);}
+.speaker-dot.ren{background:#66bb6a;}
+.speaker-dot.sakura{background:#ffcc02;}
+.speaker-name{font-family:'Dancing Script',cursive;font-size:16px;color:var(--sakura);}
+.speaker-name.kai-name{color:#90caf9;}
+.speaker-name.narrator-name{color:var(--lavender);font-style:italic;}
+.speaker-name.ren-name{color:#a5d6a7;}
+.speaker-name.sakura-name{color:#ffcc02;}
+
+.dialogue-text{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(13px,3.5vw,15px);
+  line-height:1.85;color:var(--text);
+  min-height:64px;letter-spacing:.01em;
+}
+.dialogue-cursor{display:inline-block;width:2px;height:14px;background:var(--pink);animation:cur .7s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes cur{0%,100%{opacity:1;}50%{opacity:0;}}
+.dialogue-prompt{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;
+}
+.prompt-hint{font-size:10px;color:var(--dimmed);letter-spacing:2px;text-transform:uppercase;}
+.prompt-arrow{font-size:18px;color:var(--pink);animation:arrowBounce 1.2s ease-in-out infinite;}
+@keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+.scene-label{font-size:10px;color:var(--dimmed);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;}
+
+/* ===== TOP UI ===== */
+#topUI{
+  position:absolute;top:0;left:0;right:0;z-index:25;
+  padding:10px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.top-back{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+}
+.top-back:active{background:rgba(255,255,255,.12);}
+.chapter-indicator{
+  flex:1;
+  font-family:'Cinzel Decorative',cursive;font-size:10px;
+  color:var(--lavender);letter-spacing:2px;text-align:center;
+}
+.top-settings{display:flex;gap:8px;}
+.top-btn{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:6px 12px;font-size:11px;color:var(--muted);
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.top-btn.active{background:rgba(255,107,157,.2);border-color:rgba(255,107,157,.4);color:var(--pink);}
+.top-btn:active{transform:scale(.95);}
+
+/* Progress */
+.progress-bar{position:absolute;top:0;left:0;right:0;height:2px;z-index:30;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--pink),var(--gold));transition:width .4s ease;box-shadow:0 0 8px rgba(255,107,157,.5);}
+
+/* ===== CHAPTER TITLE CARD ===== */
+#chapterCard{
+  position:fixed;inset:0;z-index:80;
+  background:rgba(5,5,18,.97);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;
+  animation:fadeIn .5s ease;
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.ch-card-num{font-size:11px;letter-spacing:6px;color:var(--dimmed);text-transform:uppercase;margin-bottom:16px;}
+.ch-card-title{
+  font-family:'Cinzel Decorative',cursive;
+  font-size:clamp(20px,6vw,48px);
+  background:linear-gradient(135deg,var(--pink),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;line-height:1.4;
+  animation:slideUp .8s ease;
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.ch-card-icon{font-size:64px;margin-bottom:16px;animation:iconPop .6s ease;}
+@keyframes iconPop{0%{transform:scale(0) rotate(-30deg);}100%{transform:scale(1) rotate(0deg);}}
+.ch-card-quote{
+  font-family:'Dancing Script',cursive;font-size:clamp(14px,3.5vw,20px);
+  color:var(--lavender);max-width:340px;line-height:1.7;
+  animation:slideUp 1s ease .2s both;
+}
+
+/* ===== EMOTION FLASH ===== */
+.emotion-overlay{
+  position:fixed;inset:0;z-index:75;pointer-events:none;
+  animation:emotionFlash .6s ease forwards;display:none;
+}
+@keyframes emotionFlash{0%{opacity:.8;}100%{opacity:0;}}
+
+/* Autoplay controls */
+#autoBar{
+  position:fixed;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(5,5,18,.95);border-top:1px solid rgba(255,107,157,.2);
+  padding:10px 16px;display:none;align-items:center;gap:12px;
+  backdrop-filter:blur(10px);
+}
+.auto-label{font-size:11px;color:var(--muted);flex:1;}
+.speed-slider{flex:1;accent-color:var(--pink);}
+.auto-stop{background:var(--rose);border:none;border-radius:20px;padding:6px 16px;color:white;font-size:12px;cursor:pointer;}
+
+/* SPECIAL: Love letter display */
+#letterOverlay{
+  position:fixed;inset:0;z-index:85;
+  background:rgba(5,5,18,.98);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;overflow-y:auto;
+  animation:fadeIn .8s ease;
+}
+.letter-paper{
+  background:linear-gradient(155deg,#fffef5,#fff8e8,#fff5d6);
+  border-radius:4px;padding:36px 30px;max-width:380px;width:100%;
+  color:#3d2408;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 2px rgba(245,200,66,.2),0 0 0 8px rgba(245,200,66,.04);
+  transform:rotate(-1deg);
+  animation:letterAppear 1s ease;
+}
+@keyframes letterAppear{from{transform:rotate(-5deg) scale(.8);opacity:0;}to{transform:rotate(-1deg) scale(1);opacity:1;}}
+.letter-top-seal{position:absolute;top:-25px;left:50%;transform:translateX(-50%);font-size:40px;}
+.letter-stain{position:absolute;top:40px;right:20px;width:30px;height:30px;background:rgba(255,200,200,.1);border-radius:50%;}
+.letter-date{font-size:11px;color:#8b6914;text-align:right;margin-bottom:20px;font-style:italic;}
+.letter-font{font-family:'Dancing Script',cursive;font-size:clamp(15px,3.5vw,18px);line-height:2;color:#3d2408;}
+.letter-font strong{color:#8b1a1a;font-weight:600;}
+.letter-sig{margin-top:20px;text-align:right;font-size:clamp(16px,4vw,22px);}
+.letter-btn{
+  margin-top:24px;
+  background:linear-gradient(135deg,var(--rose),var(--violet));
+  border:none;border-radius:30px;padding:12px 36px;
+  font-family:'Libre Baskerville',serif;font-size:14px;color:white;cursor:pointer;
+}
+
+/* Mobile touch area */
+#tapArea{position:absolute;inset:0;z-index:15;}
+
+/* Mood badge */
+.mood-badge{
+  position:absolute;top:50px;right:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:4px 8px;font-size:11px;color:var(--dimmed);
+  letter-spacing:1px;z-index:26;
+}
+
+/* Rain effect */
+.rain-container{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none;}
+
+/* === OUTRO CARD === */
+#outroScreen{
+  position:fixed;inset:0;z-index:200;
+  background:radial-gradient(ellipse at center,#150520 0%,#050510 70%);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;overflow-y:auto;
+}
+.outro-icon{font-size:80px;margin-bottom:20px;animation:heartbeat 1.5s ease-in-out infinite;}
+@keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.outro-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(18px,5vw,36px);background:linear-gradient(135deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;}
+.outro-quote{font-family:'Dancing Script',cursive;font-size:clamp(16px,4vw,24px);color:var(--lavender);margin:16px 0;max-width:340px;line-height:1.7;}
+.outro-hint{font-size:12px;color:var(--dimmed);letter-spacing:2px;margin:10px 0 24px;}
+.outro-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.outro-btn-main{background:linear-gradient(135deg,var(--rose),var(--violet));border:none;border-radius:30px;padding:14px 40px;font-family:'Cinzel Decorative',cursive;font-size:clamp(12px,3vw,15px);color:white;cursor:pointer;box-shadow:var(--gp);letter-spacing:1px;}
+.outro-btn-sec{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:30px;padding:12px 28px;font-family:'Libre Baskerville',serif;font-size:13px;color:var(--muted);cursor:pointer;}
+.outro-part2-box{background:linear-gradient(135deg,rgba(255,107,157,.1),rgba(124,58,237,.1));border:1px solid rgba(255,107,157,.3);border-radius:16px;padding:20px 24px;max-width:340px;margin:16px 0;}
+.outro-part2-label{font-size:10px;letter-spacing:4px;color:var(--gold);margin-bottom:6px;}
+.outro-part2-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(14px,4vw,20px);color:var(--text);margin-bottom:4px;}
+.outro-part2-sub{font-size:12px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<!-- FX LAYER -->
+<div id="fx"></div>
+
+<!-- SCENES -->
+<div id="scene-classroom" class="scene scene-classroom" style="opacity:0;">
+  <div class="classroom-window"></div>
+  <div class="desk-line" style="bottom:100px"></div>
+  <div class="desk-line" style="bottom:60px;opacity:.5"></div>
+  <div id="classroomStars"></div>
+</div>
+
+<div id="scene-rooftop" class="scene scene-rooftop" style="opacity:0;">
+  <div id="rooftopMoon" class="moon" style="width:70px;height:70px;top:50px;right:80px;"></div>
+  <div id="rooftopStars" class="star-field"></div>
+  <div class="city-glow" style="position:absolute;bottom:0;left:0;right:0;height:250px;background:linear-gradient(to top,rgba(255,107,157,.08),transparent);"></div>
+  <div class="fence">
+    <div class="fence-top"></div>
+  </div>
+  <div class="buildings" id="rooftopBuildings"></div>
+</div>
+
+<div id="scene-rain" class="scene scene-rain" style="opacity:0;">
+  <div id="rainContainer" class="rain-container"></div>
+  <div id="rainStars" class="star-field" style="opacity:.2;"></div>
+  <div class="buildings" id="rainBuildings"></div>
+</div>
+
+<div id="scene-city" class="scene scene-city" style="opacity:0;">
+  <div id="cityMoon" class="moon" style="width:50px;height:50px;top:60px;left:60px;opacity:.7;"></div>
+  <div id="cityStars" class="star-field"></div>
+  <div class="city-glow"></div>
+  <div class="buildings" id="cityBuildings"></div>
+</div>
+
+<div id="scene-river" class="scene scene-river" style="opacity:0;">
+  <div id="riverMoon" class="moon" style="width:80px;height:80px;top:30px;left:50%;transform:translateX(-50%);"></div>
+  <div id="riverStars" class="star-field"></div>
+  <div class="river-shimmer"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(40,80,150,.2),transparent);"></div>
+</div>
+
+<div id="scene-dawn" class="scene scene-dawn" style="opacity:0;">
+  <div class="dawn-glow"></div>
+  <div id="dawnStars" class="star-field" style="opacity:.4;"></div>
+  <div class="buildings" id="dawnBuildings"></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  
+  <div id="sceneWrap">
+    <!-- TOP UI -->
+    <div id="topUI">
+      <div class="top-back" onclick="openChapterSelect()">≡ Chapters</div>
+      <div class="chapter-indicator" id="chapterIndicator">PROLOGUE</div>
+      <div class="top-settings">
+        <div class="top-btn" id="autoBtn" onclick="toggleAuto()">▶ Auto</div>
+        <div class="top-btn" onclick="toggleSkip()">⏭ Skip</div>
+      </div>
+    </div>
+    
+    <div class="mood-badge" id="moodBadge">🌙 Night</div>
+    
+    <!-- CHARACTERS -->
+    <div id="chars"></div>
+    
+    <!-- TAP AREA -->
+    <div id="tapArea" onclick="advance()"></div>
+    
+    <!-- DIALOGUE -->
+    <div id="dialogueWrap">
+      <div class="dialogue-box" id="dialogueBox">
+        <div class="scene-label" id="sceneLabel"></div>
+        <div class="speaker-tag" id="speakerTag" style="display:none;">
+          <div class="speaker-dot" id="speakerDot"></div>
+          <div class="speaker-name" id="speakerName"></div>
+        </div>
+        <div class="dialogue-text" id="dialogueText"></div>
+        <div class="dialogue-prompt">
+          <div class="prompt-hint" id="promptHint">Tap to continue</div>
+          <div class="prompt-arrow" id="promptArrow">▼</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TITLE SCREEN -->
+<div id="titleScreen">
+  <div class="title-sakura">💗</div>
+  <div class="title-part">A Visual Novel</div>
+  <div class="title-main">Blind Love</div>
+  <div class="title-sub">"Part I — The Search"</div>
+  <div class="title-meta">
+    <div class="title-tag">📖 Full Story</div>
+    <div class="title-tag">🌸 Romance · Mystery</div>
+    <div class="title-tag">🎭 Anime Style</div>
+    <div class="title-tag">💗 6 Chapters</div>
+  </div>
+  <button class="title-btn" onclick="startStory()">Begin Reading →</button>
+  <div style="margin-top:12px;">
+    <div class="top-btn" onclick="openChapterSelectFromTitle()" style="display:inline-block;">≡ Jump to Chapter</div>
+  </div>
+  <div class="title-scroll" style="margin-top:16px;">Tap anywhere to continue · Auto-play available</div>
+</div>
+
+<!-- CHAPTER SELECTOR -->
+<div id="chapterScreen" style="display:none;">
+  <div class="ch-header">
+    <div class="ch-title">📖 Chapter Select</div>
+    <div class="ch-sub">Blind Love — Part I</div>
+  </div>
+  <div class="ch-list" id="chapterList"></div>
+  <button class="ch-close" onclick="closeChapterSelect()">← Close</button>
+</div>
+
+<!-- CHAPTER CARD -->
+<div id="chapterCard"></div>
+
+<!-- EMOTION OVERLAY -->
+<div class="emotion-overlay" id="emotionOverlay"></div>
+
+<!-- LETTER OVERLAY -->
+<div id="letterOverlay">
+  <div class="letter-paper">
+    <div class="letter-top-seal">💌</div>
+    <div class="letter-stain"></div>
+    <div class="letter-date" id="letterDate"></div>
+    <div class="letter-font" id="letterContent"></div>
+    <div class="letter-sig" id="letterSig"></div>
+  </div>
+  <button class="letter-btn" onclick="closeLetter()">Read on... →</button>
+</div>
+
+<!-- OUTRO -->
+<div id="outroScreen">
+  <div class="outro-icon">💗</div>
+  <div class="outro-title">End of Part I</div>
+  <div class="outro-quote">"She said she hates you... But why does she keep looking back?"</div>
+  <div class="outro-hint">THE STORY CONTINUES</div>
+  <div class="outro-part2-box">
+    <div class="outro-part2-label">COMING SOON</div>
+    <div class="outro-part2-title">Blind Love — Part II</div>
+    <div class="outro-part2-sub">"The Truth Behind Her Eyes"</div>
+  </div>
+  <div class="outro-btns">
+    <button class="outro-btn-main" onclick="openChapterSelectFromTitle()">📖 Read Again</button>
+    <button class="outro-btn-sec" onclick="window.location.href=\'index.html\'">🎮 Play Game</button>
+  </div>
+  <div style="margin-top:20px;font-size:11px;color:var(--dimmed);">Thank you for reading 💗</div>
+</div>
+
+<!-- AUTOPLAY BAR -->
+<div id="autoBar">
+  <span class="auto-label">⏯ Auto Speed:</span>
+  <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="5">
+  <button class="auto-stop" onclick="stopAuto()">■ Stop</button>
+</div>
+
+<script>
+// ============================================
+//  BLIND LOVE — FULL STORY ENGINE
+// ============================================
+
+// SCENES: classroom, rooftop, rain, city, river, dawn
+// SPEAKERS: narrator, kai, yuki, ren, sakura
+// EXPRESSIONS: kai: normal/happy/sad/worried | yuki: normal/happy/sad/crying/angry
+
+const CHAPTERS = [
+  {
+    id:0, name:"Prologue",
+    subtitle:"Rain. Always rain...",
+    icon:"🌧️",
+    quote:'"Some stories begin with once upon a time. This one begins with rain."'
+  },
+  {
+    id:1, name:"First Sight Isn't Always Enough",
+    subtitle:"Chapter One",
+    icon:"🌸",
+    quote:'"He noticed everything. And said nothing. For two whole weeks."'
+  },
+  {
+    id:2, name:"Midnight and Almost",
+    subtitle:"Chapter Two",
+    icon:"💌",
+    quote:'"Do you ever feel like you\'re living on the wrong planet?"'
+  },
+  {
+    id:3, name:"Something Breaks Without Sound",
+    subtitle:"Chapter Three",
+    icon:"💔",
+    quote:'"He should have noticed it sooner. That was the worst part."'
+  },
+  {
+    id:4, name:"The Night Everything Changed",
+    subtitle:"Chapter Four",
+    icon:"📱",
+    quote:'"2:34 AM. An unknown number. He almost didn\'t pick up."'
+  },
+  {
+    id:5, name:"Blind Love",
+    subtitle:"Chapter Five",
+    icon:"💗",
+    quote:'"I don\'t have to deserve people. I just have to let them stay."'
+  },
+  {
+    id:6, name:"Epilogue — The Second Disappearance",
+    subtitle:"And Then...",
+    icon:"🌑",
+    quote:'"He starts running."'
+  }
+];
+
+// ============================================
+//  FULL STORY SCRIPT
+// ============================================
+const SCRIPT = [
+// ===== PROLOGUE =====
+{chapter:0, scene:"rain", chars:[], mood:"🌧️ Rain", label:"PROLOGUE",
+ speaker:"narrator", text:"Rain. Always rain when something important happens."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"Kai Matsuda stands at the edge of the school rooftop, phone pressed to his ear. The signal crackles. Then — her voice."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"???",
+ text:""Kai... help me...""},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"Then silence. He stares at the screen. Last call: Yuki Hasegawa. 2:34 AM."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"sad"}, speaker:"narrator",
+ text:"How did they get here? How did a love so bright become something so desperate? He closes his eyes. And he remembers..."},
+
+// ===== CHAPTER 1 =====
+{chapter:1, scene:"classroom", chars:[], mood:"🌸 Morning", label:"FIRST YEAR · CLASS 2-B",
+ speaker:"narrator", text:"Three months ago. First day of second year. April. The sakura petals were still falling."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"Kai was the kind of person who noticed everything and said nothing. He'd sit by the window in 2-B, watching the world move in patterns."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"The way Ren always tripped on the same step every morning. The way sakura petals fell in spirals, not straight lines. Small things that no one else thought to track."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"normal"}, speaker:"narrator",
+ text:"Then she walked in."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"normal"}, speaker:"narrator",
+ text:"Yuki Hasegawa. Transfer student. Pink-tipped hair that caught the light like something out of a manga. Eyes that held a storm he couldn't name."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"normal"}, speaker:"yuki",
+ text:""My name is Yuki Hasegawa. I'm from Kyoto. I like... quiet places." A pause. "Please take care of me.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"normal",ren:"normal"}, speaker:"ren",
+ text:""Bro. She's either the main character or the mysterious one. No in-between.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"normal",ren:"normal"}, speaker:"narrator",
+ text:"Kai said nothing. But he watched. He noticed that she always chose the seat nearest to the exit."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"That she ate lunch alone on the east staircase — not the rooftop like everyone else. That she read books with torn covers, like someone had loved them too hard."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"normal"}, speaker:"narrator",
+ text:"That she looked at the sky whenever she thought no one was watching. Like she was searching for something she'd lost up there."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"He noticed. And said nothing. For two whole weeks."},
+
+// Rain umbrella scene
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, mood:"🌧️ Rain", label:"THE SCHOOL GATE · AFTERNOON",
+ speaker:"narrator", text:"It was raining. Of course it was. Kai had forgotten his umbrella — again. He was waiting under the school gate overhang, calculating the probability of the rain stopping in the next ten minutes."},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, speaker:"yuki",
+ text:""You're going to be late to wherever you're going.""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, speaker:"kai",
+ text:""I know.""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, speaker:"yuki",
+ text:""Then why aren't you moving?""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, speaker:"kai",
+ text:""Because running in rain is pointless. You still get wet. You're just more tired when you get there.""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"narrator",
+ text:"A pause. Then — a sound he hadn't expected. A small, soft laugh. Not mocking. Just surprised."},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"happy"}, speaker:"yuki",
+ text:""That's the most logical, unromantic thing I've ever heard in my life.""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"happy"}, speaker:"kai",
+ text:""Sorry.""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"happy"}, speaker:"yuki",
+ text:""Don't be. It's refreshing." She looked at him. Up close, those storm-colored eyes were lighter than he thought — like water before it rains. "Walk with me? I'm going to the train station.""},
+{scene:"rain", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"normal"}, speaker:"narrator",
+ text:"He walked with her. Under her umbrella. In the rain. Without an excuse. Without a plan. Just because she asked."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"That was the day Kai realized: he was absolutely, completely, catastrophically done for."},
+
+// ===== CHAPTER 2 =====
+{chapter:2, scene:"classroom", chars:[], mood:"📚 After School", label:"THE LIBRARY · ONE WEEK LATER",
+ speaker:"narrator", text:"It started with a library book. Kai found a copy of 'The Little Prince' on his desk one morning with a sticky note:"},
+{scene:"classroom", chars:[], speaker:"yuki",
+ text:""You looked like you needed this.""},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"happy"}, speaker:"narrator",
+ text:"No name. But he knew. He left it back on her desk the next morning with his own note:"},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"happy"}, speaker:"kai",
+ text:""Already read it. Three times. The fox chapter is the best one.""},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"normal"}, speaker:"yuki",
+ text:""Wrong. It's the rose chapter.""},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""The rose was vain and demanding.""},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"yuki",
+ text:""That's why it was real.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"normal",ren:"normal"}, speaker:"narrator",
+ text:"They argued in sticky notes for a week. Then Ren ratted him out to Sakura — Yuki's best friend — and suddenly they were texting."},
+
+// Late night texts
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, mood:"🌙 Midnight", label:"KAI'S ROOM · 11:47 PM",
+ speaker:"narrator", text:"And then — at 11:47 PM on a Tuesday — Yuki sent a message that changed everything."},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"yuki",
+ text:""Do you ever feel like you're living on the wrong planet?""},
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"Kai stared at the message for a long time. Then typed:"},
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""Every day. But some days are better than others.""},
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, speaker:"yuki",
+ text:""What makes them better?""},
+{scene:"city", chars:["kai"], cExpr:{kai:"happy"}, speaker:"kai",
+ text:""When something unexpected happens. Like rain in summer. Or someone sharing their umbrella with a stranger.""},
+{scene:"city", chars:["kai"], cExpr:{kai:"happy"}, speaker:"yuki",
+ text:""Kai. ...I'm glad I met you.""},
+{scene:"city", chars:["kai"], cExpr:{kai:"happy"}, speaker:"narrator",
+ text:"He didn't sleep that night."},
+
+// Rooftop scene
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, mood:"🌟 Stars", label:"THE ROOFTOP · THEIR PLACE",
+ speaker:"narrator", text:"After that, it was a quiet kind of falling. Not the dramatic, movie kind. Not flowers and confessions and background music. Just — a gravity."},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"She'd find him at the library window seat. He'd save her a spot at the vending machines. They'd walk in the rain. She'd recommend books; he'd recommend songs."},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"yuki",
+ text:""I've never shown anyone this place.""},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"kai",
+ text:""Not even Sakura?""},
+{scene:"rooftop", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"yuki",
+ text:""Sakura hates heights." A small smile. "Just you.""},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"He wanted to say: 'Why me?' He wanted to say: 'You have no idea what you do to me.' He wanted to say: 'I think I'm in love with you.'"},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"kai",
+ text:""The lights look like stars that fell and decided to stay.""},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"She leaned her head on his shoulder."},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"yuki",
+ text:""Yeah... they do.""},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"That was the closest thing to a confession either of them ever made. And maybe — just maybe — it was enough. For a while."},
+
+// Sakura & Ren moment
+{scene:"classroom", chars:["ren","sakura"], mood:"☀️ Daytime", label:"SCHOOL · THE NEXT DAY",
+ speaker:"ren", text:""You two are so painfully obvious it's actually artistic.""},
+{scene:"classroom", chars:["ren","sakura"], speaker:"sakura",
+ text:""If Yuki-chan doesn't confess first, I'm going to confess FOR her.""},
+{scene:"classroom", chars:["ren","sakura"], speaker:"ren",
+ text:""That's not how confession works—""},
+{scene:"classroom", chars:["ren","sakura"], speaker:"sakura",
+ text:""That's EXACTLY how confession works when you're Sakura Tanaka and your best friend is too stubborn!""},
+
+// ===== CHAPTER 3 =====
+{chapter:3, scene:"classroom", chars:["kai"], cExpr:{kai:"worried"}, mood:"🍂 Autumn", label:"SIX WEEKS LATER",
+ speaker:"narrator", text:"Kai didn't notice it at first. That was the worst part — he should have."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"It started small. Yuki's replies getting slower. One-word answers where there used to be paragraphs. The library seat empty on days she used to be there."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"He told himself: she's busy. She has her own life. I'm not her whole world and she's not mine. (She was. He knew she was.)"},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"sad"}, speaker:"narrator",
+ text:"Then one morning she didn't show up to class. Then two days. Then a week. Sakura wouldn't look at him in the hallway. That scared him more than anything."},
+{scene:"city", chars:["kai"], cExpr:{kai:"sad"}, mood:"📱 Late Night", label:"TEXT MESSAGES",
+ speaker:"kai", text:""Are you okay?" — Read. No reply."},
+{scene:"city", chars:["kai"], cExpr:{kai:"sad"}, speaker:"kai",
+ text:""I'm not asking you to explain anything. Just tell me you're okay." — Read. No reply."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"sad"}, mood:"🌧️ Rain", label:"YUKI'S HOUSE · THREE DAYS LATER",
+ speaker:"narrator", text:"He went to her house. Her mother opened the door — a thin woman with Yuki's eyes but none of her warmth."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:""Yuki isn't feeling well. She's not seeing anyone." Her polite smile meant: go away."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"kai",
+ text:""Can you just tell her Kai was here?""},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"The woman's expression flickered. Just for a moment. Like she recognized his name — and not in a good way. The door closed. Yuki never called back."},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"sad",ren:"normal"}, mood:"😔 Sad", label:"SCHOOL CAFETERIA",
+ speaker:"ren", text:""You look like a manga protagonist in his sad arc.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"sad",ren:"normal"}, speaker:"kai",
+ text:""I feel like one.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"sad",ren:"normal"}, speaker:"ren",
+ text:""She's going through something. It might not be about you.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"sad",ren:"normal"}, speaker:"kai",
+ text:""It feels like it's about me.""},
+{scene:"classroom", chars:["kai","ren"], cExpr:{kai:"sad",ren:"normal"}, speaker:"ren",
+ text:""That's the thing about loving someone. Their pain starts to feel like yours. Even when it has nothing to do with you.""},
+{scene:"classroom", chars:["ren"], speaker:"ren",
+ text:""Give her space. But don't disappear.""},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"sad"}, speaker:"narrator",
+ text:"Kai nodded. Every morning, he left a small note in the spot she always sat — even when she wasn't there. A word. A lyric. A small drawing."},
+{scene:"classroom", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"Something to say: 'I'm still here. You don't have to answer. But I'm here.' He didn't know if she found them."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"narrator",
+ text:"He didn't know, until much later, that she had found every single one. That she kept them all in a small box under her bed. On the worst nights, she would take them out and read them, one by one."},
+{scene:"classroom", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"narrator",
+ text:"They were the thing that kept her from completely disappearing. He didn't know. But he kept writing."},
+
+// ===== CHAPTER 4 =====
+{chapter:4, scene:"city", chars:["kai"], cExpr:{kai:"worried"}, mood:"🌃 2:34 AM", label:"KAI'S ROOM · DEEP NIGHT",
+ speaker:"narrator", text:"Six weeks of silence. Then — 2:34 AM. His phone buzzed. Unknown number. He almost didn't pick up."},
+{scene:"city", chars:["kai","yuki"], cExpr:{kai:"worried",yuki:"sad"}, speaker:"yuki",
+ text:""...Kai?" — Her voice. But wrong. Cracked, like static had gotten into it. Like she was very far away and getting farther."},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"kai",
+ text:""Yuki." He sat up so fast the room spun. "Yuki, where are you?""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"sad"}, mood:"📍 Lost", label:"SOMEWHERE · UNKNOWN",
+ speaker:"yuki", text:""I don't... I don't know. I don't know where I am. I think I got on a train and I didn't stop and now I don't know—""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""Kai, I'm sorry. I know I don't have the right to call you after everything. I know I was awful and I know—""},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"kai",
+ text:""Yuki. Stop." His voice was surprisingly calm. Calmer than he felt. "I don't care about any of that right now. Tell me what you see around you.""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""A... a station. Old. There's a clock but it's not working. There's a river — I can hear water—""},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"kai",
+ text:""Is there a sign? On the platform?""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""...Aoshima. The sign says Aoshima.""},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"He was already putting on his shoes."},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"kai",
+ text:""I'm coming. Stay where you are. Don't move.""},
+{scene:"rain", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""Kai, you don't have to—""},
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""I know I don't have to." He grabbed his jacket. "I want to. Stay on the line.""},
+{scene:"city", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"The call dropped. Network error. He stared at the dead screen. Then pocketed his phone, walked out into the 2 AM city, and started running."},
+
+// Train montage
+{scene:"city", chars:[], mood:"🚃 Journey", label:"THREE HOURS BY TRAIN · ONE BY BUS",
+ speaker:"narrator", text:"He did not stop. Three hours by train across a sleeping city. One hour by bus into the dark countryside. Half a kilometer on foot following the sound of water."},
+{scene:"river", chars:[], speaker:"narrator",
+ text:"He found her at an old wooden bus stop near the river, sitting with her knees drawn up to her chest. Her uniform crumpled. Her pink-tipped hair tangled from the wind."},
+
+// ===== CHAPTER 5 =====
+{chapter:5, scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, mood:"🌊 River", label:"RIVERSIDE BUS STOP · 5 AM",
+ speaker:"narrator", text:"She looked like something the night had tried to swallow and couldn't quite manage."},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"narrator",
+ text:"She looked up when she heard his footsteps. And her face — he would remember that face for the rest of his life. Relief. Guilt. Something raw and exposed that she immediately tried to hide."},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""You actually came.""},
+{scene:"river", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""I said I would.""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""It's 5 AM. You rode for four hours." She wrapped her arms around herself. "Why?""},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"kai",
+ text:""Because it's you.""},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"narrator",
+ text:"He sat down beside her. Not too close. Just close enough. The river moved past them in the dark. Somewhere, a bird started singing — the first note of dawn."},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"yuki",
+ text:""I'm not okay." Her voice barely above a whisper. "I've been... not okay for a long time. Before I moved here.""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""Something happened in Kyoto that I've been running from. I thought if I came here, if I started over, it would stop following me. But it didn't. It just... waited.""},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"kai",
+ text:""What happened?""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""Not tonight. I can't tonight.""},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"sad"}, speaker:"kai",
+ text:""Okay.""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""I pushed you away because I was scared. Scared of what would happen if you got too close and then saw... all of it. The real stuff. Not the books and the rooftop and the rain. The actual mess underneath.""},
+{scene:"river", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""Yuki." He turned to look at her. "I've been leaving you notes for six weeks in an empty chair. I think we're a little past the point where the mess scares me.""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"sad"}, speaker:"yuki",
+ text:""You're so..." She started."},
+{scene:"river", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""Logical? Unromantic?""},
+{scene:"river", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"yuki",
+ text:"A broken laugh — half sob, half relief. "I was going to say stupidly good." She pressed her hands to her face. "I don't deserve you.""},
+{scene:"river", chars:["kai","yuki"], cExpr:{kai:"normal",yuki:"happy"}, speaker:"kai",
+ text:""You don't have to deserve people. You just have to let them stay.""},
+{scene:"dawn", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, mood:"🌅 Dawn", label:"5:13 AM",
+ speaker:"narrator", text:"She lowered her hands. Looked at him. And in the grey-pink light of 5 AM at the edge of a river in the middle of nowhere, Yuki Hasegawa reached out — and took Kai's hand."},
+{scene:"dawn", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"He held it. Both of them — breathing. Existing. Together in the quiet."},
+{scene:"dawn", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"yuki",
+ text:""I'm sorry.""},
+{scene:"dawn", chars:["kai"], cExpr:{kai:"happy"}, speaker:"kai",
+ text:""I know.""},
+{scene:"dawn", chars:["yuki"], cExpr:{yuki:"happy"}, speaker:"yuki",
+ text:""I'll explain everything. Soon. When I can.""},
+{scene:"dawn", chars:["kai"], cExpr:{kai:"happy"}, speaker:"kai",
+ text:""Take your time.""},
+{scene:"dawn", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"He did not let go of her hand all the way home."},
+
+// Letter scene
+{scene:"dawn", chars:[], special:"letter",
+ letter:{date:"Three Weeks Later · Tuesday",
+   content:"<strong>Kai,</strong><br><br>You asked me once why I always sat near the exit.<br><br>I told you I liked to be ready to leave. What I didn't say — what I couldn't say then — is that I've been leaving rooms before anyone can ask me to for as long as I can remember.<br><br>That night at the river changed something.<br><br>You didn't ask me to be okay. You didn't try to fix me. You just <em>stayed.</em> And I realized: I've been so afraid of being known that I never stopped to think about what it would feel like to be <em>found.</em><br><br>There are things I need to tell you. Things from Kyoto. Things I've been carrying alone that have gotten so heavy I can barely stand up straight some days.<br><br>I don't know if I'm brave enough yet. But I'm going to try.<br><br>Thank you for the notes. I kept all of them.<br>Every single one.",
+   sig:"— Yuki 🌸"}
+},
+
+// ===== EPILOGUE =====
+{chapter:6, scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, mood:"✨ Soft", label:"THREE WEEKS LATER",
+ speaker:"narrator", text:"Everything seemed better for a while. Not perfect — Yuki was still working through whatever chased her from Kyoto. But there was warmth again."},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, speaker:"narrator",
+ text:"Notes that became calls that became afternoons in the library and evenings on the rooftop. The lock somehow always ended up unlocked when they wanted to go up there."},
+{scene:"classroom", chars:["ren","sakura"], mood:"😊 Teasing", label:"SCHOOL HALLWAY",
+ speaker:"sakura", text:""OKAY so you're basically dating but neither of you has said it yet which is the most aggressively romantic thing I've ever witnessed in my seventeen years of life—""},
+{scene:"classroom", chars:["ren","sakura"], speaker:"ren",
+ text:""Sakura, please, you're going to give the universe anxiety—""},
+{scene:"classroom", chars:["ren","sakura"], speaker:"sakura",
+ text:""Someone has to! They're out there holding hands at bus stops and sharing earphones and NOBODY is SAYING ANYTHING—""},
+{scene:"rooftop", chars:["kai","yuki"], cExpr:{kai:"happy",yuki:"happy"}, mood:"🌸 Evening", label:"THE ROOFTOP · ONE MONTH AFTER",
+ speaker:"narrator", text:"And then — three weeks later — it happened again. Not a slow disappearing this time. An instant one."},
+{scene:"city", chars:["kai"], cExpr:{kai:"normal"}, mood:"📱 9 PM", label:"KAI'S PHONE",
+ speaker:"yuki", text:""I need to tell you something important. Tomorrow. Rooftop.""},
+{scene:"rooftop", chars:["kai"], cExpr:{kai:"worried"}, mood:"😰 Waiting", label:"NEXT MORNING · THE ROOFTOP",
+ speaker:"narrator", text:"He waited at the rooftop at 8 AM. She never came. By noon, Sakura was crying in the hallway and refusing to explain why."},
+{scene:"city", chars:["kai"], cExpr:{kai:"sad"}, mood:"🌃 Midnight", label:"THAT NIGHT",
+ speaker:"narrator", text:"By 3 PM, her phone went straight to voicemail. By midnight, her mother had called the police. By 2:34 AM the next morning—"},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, mood:"🌧️ 2:34 AM", label:"HIS PHONE",
+ speaker:"yuki", text:""Kai... help me...""},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"And now he stands in the rain. Phone dead. No signal. No plan. Just a name in his chest like a compass needle pointing north."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"worried"}, speaker:"narrator",
+ text:"He knows one thing: something is very wrong. And Yuki is somewhere out there, in the dark, waiting for someone who isn't afraid of the mess."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"normal"}, speaker:"kai",
+ text:""I'm coming, Yuki. Just hold on.""},
+{scene:"rain", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"He's not afraid."},
+{scene:"rain", chars:["kai"], cExpr:{kai:"normal"}, speaker:"narrator",
+ text:"He starts running."},
+{scene:"rain", chars:[], special:"end"}
+];
+
+// ============================================
+//  ENGINE
+// ============================================
+let idx = 0;
+let typing = false;
+let typeTimeout;
+let autoMode = false;
+let autoInterval;
+let skipMode = false;
+let currentScene = '';
+let unlockedChapters = [0];
+
+// Build chapter start indices
+const chapterStarts = {};
+SCRIPT.forEach((s,i)=>{ if(s.chapter!==undefined && chapterStarts[s.chapter]===undefined) chapterStarts[s.chapter]=i; });
+
+function startStory(){
+  document.getElementById('titleScreen').style.opacity='0';
+  setTimeout(()=>document.getElementById('titleScreen').style.display='none',800);
+  document.getElementById('titleScreen').style.transition='opacity .8s';
+  setTimeout(()=>render(),300);
+}
+
+function render(){
+  if(idx>=SCRIPT.length){showOutro();return;}
+  const s=SCRIPT[idx];
+
+  // Chapter card
+  if(s.chapter!==undefined){
+    if(!unlockedChapters.includes(s.chapter))unlockedChapters.push(s.chapter);
+    showChapterCard(s.chapter,()=>renderScene(s));
+  } else if(s.special==='letter'){
+    showLetter(s.letter,()=>{idx++;render();});
+  } else if(s.special==='end'){
+    setTimeout(showOutro,600);
+  } else {
+    renderScene(s);
+  }
+}
+
+function renderScene(s){
+  // Switch scene
+  if(s.scene && s.scene!==currentScene){
+    switchScene(s.scene);
+    currentScene=s.scene;
+  }
+  // Mood
+  if(s.mood) document.getElementById('moodBadge').textContent=s.mood;
+  // Update progress
+  document.getElementById('progressFill').style.width=(idx/SCRIPT.length*100)+'%';
+
+  // Characters
+  renderChars(s.chars||[],s.cExpr||{});
+
+  // Narrator class
+  const app=document.getElementById('app');
+  if(s.speaker==='narrator')app.classList.add('narrator-mode');
+  else app.classList.remove('narrator-mode');
+
+  // Scene label
+  const lbl=document.getElementById('sceneLabel');
+  lbl.textContent=s.label||'';
+
+  // Speaker
+  const tag=document.getElementById('speakerTag');
+  const dot=document.getElementById('speakerDot');
+  const nm=document.getElementById('speakerName');
+  if(s.speaker && s.speaker!=='narrator'){
+    tag.style.display='inline-flex';
+    const names={kai:'Kai Matsuda',yuki:'Yuki Hasegawa',ren:'Ren Fujiwara',sakura:'Sakura Tanaka','???':'???'};
+    nm.textContent=names[s.speaker]||s.speaker;
+    nm.className='speaker-name '+s.speaker+'-name';
+    dot.className='speaker-dot '+s.speaker;
+    // Chapter indicator
+    document.getElementById('chapterIndicator').textContent=
+      s.chapter!==undefined?'CHAPTER '+s.chapter:CHAPTERS[getCurrentChapter()]?.name||'';
+  } else {
+    tag.style.display='none';
+    dot.className='speaker-dot narrator';
+    nm.className='speaker-name narrator-name';
+  }
+
+  // Typewrite text
+  const txt=s.text||'';
+  if(skipMode){
+    document.getElementById('dialogueText').innerHTML=txt;
+    document.getElementById('promptArrow').style.display='block';
+  } else {
+    typeText(txt);
+  }
+}
+
+function getCurrentChapter(){
+  for(let i=SCRIPT.length-1;i>=0;i--){
+    if(SCRIPT[i].chapter!==undefined&&i<=idx)return SCRIPT[i].chapter;
+  }
+  return 0;
+}
+
+function typeText(txt){
+  typing=true;
+  document.getElementById('promptArrow').style.display='none';
+  const el=document.getElementById('dialogueText');
+  let i=0;el.innerHTML='';
+  clearTimeout(typeTimeout);
+  const speed=skipMode?8:28;
+  function step(){
+    if(i<=txt.length){
+      el.innerHTML=txt.slice(0,i)+'<span class="dialogue-cursor"></span>';
+      i++;typeTimeout=setTimeout(step,speed);
+    } else {
+      el.innerHTML=txt;
+      typing=false;
+      document.getElementById('promptArrow').style.display='block';
+      if(autoMode)autoInterval=setTimeout(advance,3200/(document.getElementById('speedSlider').value/5));
+    }
+  }
+  step();
+}
+
+function advance(){
+  clearTimeout(autoInterval);
+  if(typing){
+    clearTimeout(typeTimeout);
+    typing=false;
+    const s=SCRIPT[idx];
+    document.getElementById('dialogueText').innerHTML=s.text||'';
+    document.getElementById('promptArrow').style.display='block';
+    if(autoMode)autoInterval=setTimeout(advance,3200);
+    return;
+  }
+  idx++;
+  render();
+}
+
+// ============================================
+//  SCENE SYSTEM
+// ============================================
+const SCENES=['classroom','rooftop','rain','city','river','dawn'];
+function switchScene(name){
+  SCENES.forEach(s=>{
+    const el=document.getElementById('scene-'+s);
+    if(el)el.style.opacity=s===name?'1':'0';
+  });
+}
+
+// ============================================
+//  CHARACTER RENDERER
+// ============================================
+function renderChars(chars,exprs){
+  const cont=document.getElementById('chars');
+  cont.innerHTML='';
+  if(!chars||chars.length===0)return;
+
+  chars.forEach(c=>{
+    const isActive=chars.length===1||exprs[c]!=='inactive';
+    const expr=exprs[c]||'normal';
+    const el=document.createElement('div');
+    el.className='char-'+c+'-art '+(chars.length>1&&!exprs[c]?'':'active');
+    el.innerHTML=buildChar(c,expr);
+    cont.appendChild(el);
+  });
+}
+
+function buildChar(name,expr){
+  if(name==='kai')return buildKai(expr);
+  if(name==='yuki')return buildYuki(expr);
+  if(name==='ren')return buildRen(expr);
+  if(name==='sakura')return buildSakura(expr);
+  return '';
+}
+
+function buildKai(e){
+  const eyeClass=e==='happy'?'k-eye happy':e==='sad'||e==='worried'?'k-eye sad':'k-eye';
+  const browClass=e==='worried'?'k-brow worried':e==='sad'?'k-brow sad':'k-brow';
+  const mouthClass=e==='happy'?'k-mouth smile':e==='sad'?'k-mouth sad-m':'k-mouth';
+  const blush=e==='happy'?'<div class="k-blush"><span></span><span></span></div>':'';
+  return `<div class="char-kai-art" style="position:relative;">
+    <div class="k-hair-main">
+      <div class="k-hair-side-l"></div><div class="k-hair-side-r"></div>
+      <div class="k-hair-bang"></div>
+    </div>
+    <div class="k-face">
+      <div class="k-brows"><div class="${browClass}"></div><div class="${browClass}"></div></div>
+      <div class="k-eyes"><div class="${eyeClass}"></div><div class="${eyeClass}"></div></div>
+      ${blush}
+      <div class="k-nose"></div>
+      <div class="${mouthClass}"></div>
+    </div>
+    <div class="k-neck"></div>
+    <div class="k-uniform"><div class="k-uniform-line"></div><div class="k-tie"></div></div>
+  </div>`;
+}
+
+function buildYuki(e){
+  const eyeClass=e==='crying'?'y-eye crying':'y-eye';
+  const browClass=e==='angry'?'y-brow angry':e==='sad'||e==='crying'?'y-brow sad':'y-brow';
+  const mouthClass=e==='happy'?'y-mouth-y smile-y':e==='sad'||e==='crying'?'y-mouth-y sad-y':e==='angry'?'y-mouth-y angry-y':'y-mouth-y';
+  const blush=e==='happy'?'<div class="y-blush-y"><span></span><span></span></div>':'';
+  const tear=e==='crying'?'<div class="y-tear" style="left:12px;"></div>':'';
+  return `<div class="char-yuki-art" style="position:relative;">
+    <div class="y-hair-top" style="position:relative;">
+      <div class="y-ribbon"></div>
+      <div class="y-hair-tip-l"></div><div class="y-hair-tip-r"></div>
+      <div class="y-bang-l"></div><div class="y-bang-r"></div>
+    </div>
+    <div class="y-face">
+      <div class="y-brows"><div class="${browClass}"></div><div class="${browClass}"></div></div>
+      <div class="y-eyes">
+        <div class="${eyeClass}"><div class="y-lashes-l"><div class="y-lash"></div><div class="y-lash"></div><div class="y-lash"></div></div></div>
+        <div class="${eyeClass}"><div class="y-lashes-r"><div class="y-lash"></div><div class="y-lash"></div><div class="y-lash"></div></div></div>
+      </div>
+      ${blush}${tear}
+      <div class="y-nose-y"></div>
+      <div class="${mouthClass}"></div>
+    </div>
+    <div class="y-neck-y"></div>
+    <div class="y-uniform"><div class="y-collar-bow">🎀</div></div>
+    <div class="y-skirt"></div>
+  </div>`;
+}
+
+function buildRen(e){
+  return `<div class="char-ren-art">
+    <div class="r-hair" style="position:relative;">
+      <div class="r-spike"></div><div class="r-spike"></div><div class="r-spike"></div>
+    </div>
+    <div class="r-face" style="position:relative;">
+      <div style="position:absolute;top:17px;left:0;right:0;display:flex;justify-content:space-around;padding:0 8px;">
+        <div class="r-eye"></div><div class="r-eye"></div>
+      </div>
+      <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:14px;height:5px;border-bottom:2px solid rgba(180,100,60,.5);border-radius:0 0 8px 8px;"></div>
+    </div>
+    <div class="r-body"></div>
+  </div>`;
+}
+
+function buildSakura(e){
+  return `<div class="char-sakura-art">
+    <div class="s-hair-top" style="position:relative;">
+      <div class="s-twintail-l"></div><div class="s-twintail-r"></div>
+    </div>
+    <div class="s-face" style="position:relative;">
+      <div style="position:absolute;top:16px;left:0;right:0;display:flex;justify-content:space-around;padding:0 7px;">
+        <div class="s-eye"></div><div class="s-eye"></div>
+      </div>
+      <div style="position:absolute;top:28px;left:0;right:0;display:flex;justify-content:space-between;padding:0 4px;">
+        <div style="width:11px;height:5px;background:rgba(255,150,100,.4);border-radius:50%;"></div>
+        <div style="width:11px;height:5px;background:rgba(255,150,100,.4);border-radius:50%;"></div>
+      </div>
+      <div style="position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:${e==='happy'?'15':'12'}px;height:6px;border-bottom:2px solid rgba(190,80,110,.6);border-radius:0 0 10px 10px;"></div>
+    </div>
+    <div class="s-body"></div>
+  </div>`;
+}
+
+// ============================================
+//  CHAPTER CARD
+// ============================================
+function showChapterCard(chId,cb){
+  const ch=CHAPTERS[chId];if(!ch)return cb&&cb();
+  const card=document.getElementById('chapterCard');
+  card.innerHTML=`
+    <div class="ch-card-num">${ch.subtitle||'Chapter '+(chId)}</div>
+    <div class="ch-card-icon">${ch.icon}</div>
+    <div class="ch-card-title">${ch.name}</div>
+    <div class="ch-card-quote">${ch.quote}</div>
+  `;
+  card.style.display='flex';
+  setTimeout(()=>{
+    card.style.opacity='0';card.style.transition='opacity .8s';
+    setTimeout(()=>{card.style.display='none';card.style.opacity='';card.style.transition='';if(cb)cb();},800);
+  },2400);
+}
+
+// ============================================
+//  LETTER
+// ============================================
+function showLetter(data,cb){
+  document.getElementById('letterDate').textContent=data.date;
+  document.getElementById('letterContent').innerHTML=data.content;
+  document.getElementById('letterSig').textContent=data.sig;
+  document.getElementById('letterOverlay').style.display='flex';
+  document.getElementById('letterOverlay')._cb=cb;
+}
+function closeLetter(){
+  document.getElementById('letterOverlay').style.display='none';
+  const cb=document.getElementById('letterOverlay')._cb;
+  if(cb)cb();
+}
+
+// ============================================
+//  OUTRO
+// ============================================
+function showOutro(){document.getElementById('outroScreen').style.display='flex';}
+
+// ============================================
+//  AUTOPLAY
+// ============================================
+function toggleAuto(){
+  autoMode=!autoMode;
+  document.getElementById('autoBtn').classList.toggle('active',autoMode);
+  document.getElementById('autoBar').style.display=autoMode?'flex':'none';
+  if(autoMode&&!typing)autoInterval=setTimeout(advance,2000);
+  else clearTimeout(autoInterval);
+}
+function stopAuto(){autoMode=false;document.getElementById('autoBtn').classList.remove('active');document.getElementById('autoBar').style.display='none';clearTimeout(autoInterval);}
+function toggleSkip(){skipMode=!skipMode;document.querySelector('.top-btn:last-child').classList.toggle('active',skipMode);}
+
+// ============================================
+//  CHAPTER SELECT
+// ============================================
+function openChapterSelect(){
+  buildChapterList();
+  document.getElementById('chapterScreen').style.display='flex';
+}
+function openChapterSelectFromTitle(){
+  buildChapterList();
+  document.getElementById('chapterScreen').style.display='flex';
+}
+function closeChapterSelect(){document.getElementById('chapterScreen').style.display='none';}
+
+function buildChapterList(){
+  const list=document.getElementById('chapterList');list.innerHTML='';
+  CHAPTERS.forEach((ch,i)=>{
+    const unlocked=unlockedChapters.includes(i)||i===0;
+    const current=getCurrentChapter()===i;
+    const card=document.createElement('div');
+    card.className='ch-card'+(current?' current':'')+(unlocked?'':' locked');
+    card.innerHTML=`
+      <div class="ch-num">${i===0?'P':i}</div>
+      <div class="ch-info">
+        <div class="ch-name">${ch.name}</div>
+        <div class="ch-desc">${ch.subtitle}</div>
+      </div>
+      <div class="ch-icon">${unlocked?ch.icon:'🔒'}</div>
+    `;
+    if(unlocked){
+      card.onclick=()=>{
+        idx=chapterStarts[i]||0;
+        closeChapterSelect();
+        document.getElementById('titleScreen').style.display='none';
+        typing=false;clearTimeout(typeTimeout);currentScene='';
+        render();
+      };
+    }
+    list.appendChild(card);
+  });
+}
+
+// ============================================
+//  ENVIRONMENT EFFECTS
+// ============================================
+function buildStars(containerId,count=60){
+  const c=document.getElementById(containerId);if(!c)return;
+  for(let i=0;i<count;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    const sz=Math.random()*2+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*70}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*5}s;opacity:${.2+Math.random()*.8}`;
+    c.appendChild(s);
+  }
+}
+
+function buildBuildings(containerId){
+  const c=document.getElementById(containerId);if(!c)return;
+  const hh=[70,90,55,100,75,60,85,65,80,50,110,70,45,95,60];
+  const ww=[28,22,34,26,30,38,24,32,28,42,20,36,44,24,30];
+  let html='',left=0;
+  hh.forEach((h,i)=>{
+    const w=ww[i];
+    html+=`<div style="position:absolute;bottom:0;left:${left}px;width:${w}px;height:${h}px;background:rgba(10,10,25,.95);border-top:1px solid rgba(255,255,255,.04);">`;
+    for(let wy=8;wy<h-10;wy+=14)for(let wx=4;wx<w-4;wx+=10)
+      if(Math.random()>.35)html+=`<div style="position:absolute;top:${wy}px;left:${wx}px;width:5px;height:7px;background:rgba(255,220,150,${.08+Math.random()*.3});border-radius:1px;"></div>`;
+    html+='</div>';left+=w+Math.floor(Math.random()*6)+2;
+  });
+  c.innerHTML=html;
+}
+
+function buildRain(){
+  const c=document.getElementById('rainContainer');if(!c)return;
+  for(let i=0;i<80;i++){
+    const drop=document.createElement('div');drop.className='raindrop';
+    const h=30+Math.random()*80;const dur=.4+Math.random()*.6;
+    drop.style.cssText=`left:${Math.random()*110-5}%;height:${h}px;opacity:${.1+Math.random()*.3};animation-duration:${dur}s;animation-delay:${Math.random()*dur}s;`;
+    c.appendChild(drop);
+  }
+}
+
+function buildPetals(){
+  const c=document.getElementById('fx');
+  const em=['🌸','💮','🌺','✿'];
+  for(let i=0;i<10;i++){
+    const p=document.createElement('div');p.className='petal';
+    p.textContent=em[Math.floor(Math.random()*em.length)];
+    const d=10+Math.random()*15;
+    p.style.cssText=`left:${Math.random()*100}%;animation-duration:${d}s;animation-delay:${Math.random()*d}s;font-size:${10+Math.random()*8}px;z-index:1;pointer-events:none;`;
+    c.appendChild(p);
+  }
+}
+
+// INIT
+window.onload=()=>{
+  buildStars('classroomStars',30);
+  buildStars('rooftopStars',80);
+  buildStars('rainStars',20);
+  buildStars('cityStars',60);
+  buildStars('riverStars',70);
+  buildStars('dawnStars',40);
+  buildBuildings('rooftopBuildings');
+  buildBuildings('rainBuildings');
+  buildBuildings('cityBuildings');
+  buildBuildings('dawnBuildings');
+  buildRain();
+  buildPetals();
+  switchScene('rain'); // title bg
+};
+</script>
+</body>
+</html>

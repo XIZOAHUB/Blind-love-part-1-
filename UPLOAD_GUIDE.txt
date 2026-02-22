@@ -1,0 +1,90 @@
+╔══════════════════════════════════════════════════════════╗
+║          BLIND LOVE PWA — UPLOAD GUIDE                  ║
+║          plya.xizoa.com pe kaise upload karein          ║
+╚══════════════════════════════════════════════════════════╝
+
+📁 YE SAARI FILES UPLOAD KARNI HAIN:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📄 index.html      ← Main game file (MUST)
+  📄 manifest.json   ← PWA info (MUST)  
+  📄 sw.js           ← Service Worker (MUST)
+  📄 offline.html    ← Offline page (MUST)
+  📄 .htaccess       ← Server config (MUST)
+  📄 robots.txt      ← SEO (recommended)
+  📄 sitemap.xml     ← SEO (recommended)
+  📁 icons/          ← Poora folder upload karo (MUST)
+    ├── icon-72.png
+    ├── icon-96.png
+    ├── icon-128.png
+    ├── icon-144.png
+    ├── icon-152.png
+    ├── icon-192.png
+    ├── icon-384.png
+    ├── icon-512.png
+    └── screenshot1.png
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔧 STEP BY STEP — cPanel / FTP se:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPTION A — cPanel File Manager:
+  1. cPanel login karo
+  2. File Manager open karo
+  3. public_html folder pe jao
+  4. Saari files aur icons folder upload karo
+  5. Verify: https://plya.xizoa.com/index.html khule
+
+OPTION B — FTP (FileZilla):
+  1. FileZilla open karo
+  2. Host: plya.xizoa.com | Port: 21
+  3. Username & Password apna daalo
+  4. Right side me /public_html pe jao
+  5. Saari files drag karke upload karo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ JARURI REQUIREMENTS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓ HTTPS hona CHAHIYE (PWA ke liye mandatory)
+    → Free SSL: cPanel > SSL/TLS > Let's Encrypt
+  ✓ Domain kaam karta ho
+  ✓ .htaccess support (Apache server pe hota hai)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 USER KAISE INSTALL KAREIN (App):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ANDROID (Chrome):
+  1. Chrome me site kholo
+  2. Bottom me "Add to Home Screen" banner aayega
+  3. Tap karo → Install
+  4. Game icon home screen pe aa jaayega ✓
+
+iPhone (Safari):
+  1. Safari me site kholo  
+  2. Share button (box with arrow) tap karo
+  3. "Add to Home Screen" select karo
+  4. Add tap karo ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧪 TEST KARO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Upload ke baad Chrome DevTools me:
+  → F12 > Application tab > Manifest (check karo)
+  → F12 > Application tab > Service Workers (check karo)
+  → Lighthouse run karo → PWA score dekhna
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❓ PROBLEM? Common fixes:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ❌ Install button nahi aa raha
+     → HTTPS check karo, HTTP pe PWA kaam nahi karta
+
+  ❌ sw.js error
+     → Make sure sw.js root folder me hai (/public_html/sw.js)
+     → NOT in subfolder!
+
+  ❌ Icons nahi dikh rahe
+     → icons/ folder poora upload hua? 8 files honi chahiye
+
+  ❌ Game offline nahi chalta
+     → Service Worker register hua? DevTools check karo

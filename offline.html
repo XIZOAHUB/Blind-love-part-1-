@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blind Love — Offline</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#08080f;
+  color:#f0e6ff;
+  font-family:sans-serif;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;padding:30px;
+}
+.heart{font-size:80px;animation:hb 1.5s ease-in-out infinite;margin-bottom:20px;}
+@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(20px,5vw,36px);background:linear-gradient(135deg,#ff6b9d,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;}
+p{color:#8888aa;font-size:14px;max-width:300px;line-height:1.8;margin:10px auto;}
+.quote{font-family:'Dancing Script',cursive;font-size:20px;color:#a78bfa;margin:20px 0;}
+button{background:linear-gradient(135deg,#ff3d7f,#7c3aed);border:none;border-radius:30px;padding:14px 36px;color:white;font-size:15px;font-weight:700;cursor:pointer;margin-top:20px;}
+button:active{transform:scale(.96);}
+</style>
+</head>
+<body>
+<div class="heart">💔</div>
+<h1>You're Offline</h1>
+<div class="quote">"Even in the dark, I'll wait for you..."</div>
+<p>Internet nahi hai abhi. Par Yuki ka intezaar karna nahi chhuta. Network wapas aane par try karo!</p>
+<p style="color:#ff6b9d;font-size:12px;margin-top:8px;">Already downloaded missions will still work ✓</p>
+<button onclick="location.reload()">🔄 Retry Connection</button>
+</body>
+</html>
